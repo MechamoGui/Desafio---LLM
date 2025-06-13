@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Chatbot Futebol Brasileiro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .soccer-ball {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 30px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(-50%); }
+            40% { transform: translateY(-60%); }
+            60% { transform: translateY(-55%); }
+        }
+
+        .quick-buttons {
+            padding: 15px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: #fff;
+            border: 2px solid #00b894;
+            color: #00b894;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .quick-btn:hover {
+            background: #00b894;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+
+        .message.user .message-content {
+            background: #00b894;
+            color: white;
+        }
+
+        .message-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .message.bot .message-avatar {
+            background: #00b894;
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #007bff;
+            color: white;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .input-field {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-field:focus {
+            border-color: #00b894;
+        }
+
+        .send-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            background: #00a085;
+            transform: scale(1.1);
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing {
+            display: none;
+            align-items: center;
+            gap: 5px;
+            color: #666;
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .typing.show {
+            display: flex;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            background: #666;
+            border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            padding: 40px 20px;
+            font-size: 16px;
+        }
+
+        .welcome-message h3 {
+            color: #00b894;
+            margin-bottom: 10px;
+        }
+
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                height: 100vh;
+                border-radius: 0;
+            }
+            
+            .quick-buttons {
+                padding: 10px;
+            }
+            
+            .quick-btn {
+                font-size: 11px;
+                padding: 6px 12px;
+            }
+            
+            .message-content {
+                max-width: 85%;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div class="header">
+            <h1>⚽ Chatbot Futebol Brasileiro</h1>
+            <p>Pergunte sobre times, jogadores e história do nosso futebol!</p>
+            <div class="soccer-ball">⚽</div>
+        </div>
+     
+        <div class="quick-buttons">
+            <button class="quick-btn" onclick="sendQuickMessage('Conte sobre o Pelé')">👑 Pelé</button>
+            <button class="quick-btn" onclick="sendQuickMessage('História do Flamengo')">⚫🔴 Flamengo</button>
+            <button class="quick-btn" onclick="sendQuickMessage('Quantas copas o Brasil ganhou?')">🏆 Copas</button>
+            <button class="quick-btn" onclick="sendQuickMessage('O que é o Brasileirão?')">🏆 Brasileirão</button>
+            <button class="quick-btn" onclick="getCuriosity()">🎲 Curiosidade</button>
+            <button class="quick-btn" onclick="getTeams()">📋 Times</button>
+        </div>
+        
+        <div class="chat-area" id="chatArea">
+            <div class="welcome-message">
+                <h3>Bem-vindo ao Chat! ⚽</h3>
+                <p>Faça perguntas sobre futebol brasileiro ou use os botões acima para começar!</p>
+            </div>
+        </div>
+
+        <div class="typing" id="typing">
+            <div class="message-avatar">⚽</div>
+            <span>Digitando</span>
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+
+        <div class="input-area">
+            <input 
+                type="text" 
+                class="input-field" 
+                id="messageInput" 
+                placeholder="Digite sua pergunta sobre futebol brasileiro..."
+                onkeypress="handleKeyPress(event)"
+            >
+            <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+                ➤
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const typing = document.getElementById('typing');
+
+        function addMessage(content, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user' : 'bot'}`;
+            
+            messageDiv.innerHTML = `
+                <div class="message-avatar">${isUser ? '👤' : '⚽'}</div>
+                <div class="message-content">${content}</div>
+            `;
+    
+            const welcome = chatArea.querySelector('.welcome-message');
+            if (welcome) {
+                welcome.remove();
+            }
+            
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function showTyping() {
+            typing.classList.add('show');
+            chatArea.scrollTop = chatArea.scrollHeight;
+        }
+
+        function hideTyping() {
+            typing.classList.remove('show');
+        }
+
+        async function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            addMessage(message, true);
+            messageInput.value = '';
+            sendBtn.disabled = true;
+            showTyping();
+
+            try {
+                const response = await fetch('http://localhost:3000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ pergunta: message })
+                });
+
+                const data = await response.json();
+                
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage(data.resposta);
+                    sendBtn.disabled = false;
+                }, 1000); 
+
+            } catch (error) {
+                hideTyping();
+                addMessage('❌ Erro ao conectar com o servidor. Verifique se o backend está rodando na porta 3000.');
+                sendBtn.disabled = false;
+            }
+        }
+
+        function sendQuickMessage(message) {
+            messageInput.value = message;
+            sendMessage();
+        }
+
+        async function getCuriosity() {
+            showTyping();
+            try {
+                const response = await fetch('http://localhost:3000/curiosidade');
+                const data = await response.json();
+                
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage(data.curiosidade);
+                }, 1000);
+                
+            } catch (error) {
+                hideTyping();
+                addMessage('❌ Erro ao buscar curiosidade. Verifique a conexão com o servidor.');
+            }
+        }
+
+        async function getTeams() {
+            showTyping();
+            try {
+                const response = await fetch('http://localhost:3000/times');
+                const data = await response.json();
+                
+                let teamsText = '🏆 <strong>Principais Times Brasileiros:</strong><br><br>';
+                data.times.forEach(time => {
+                    teamsText += `${time.cores} <strong>${time.nome}</strong> (${time.apelido}) - Fundado em ${time.fundacao}<br>`;
+                });
+                
+                setTimeout(() => {
+                    hideTyping();
+                    addMessage(teamsText);
+                }, 1000);
+                
+            } catch (error) {
+                hideTyping();
+                addMessage('❌ Erro ao buscar times. Verifique a conexão com o servidor.');
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        window.onload = () => {
+            messageInput.focus();
+        };
+    </script>
+</body>
+</html>
