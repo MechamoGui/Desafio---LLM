@@ -1,6 +1,6 @@
 # Fetch & Store
 
-Aplicativo React Native para registro e visualização de Atividades, Desenvolvido com Expo.
+Aplicação para realizar perguntas relacioandas ao futebol.
 
 ## Funcionalidades
 - Curiosidades aleatórias sobre o futebol nacional
