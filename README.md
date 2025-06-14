@@ -1,21 +1,54 @@
-⚽ Funcionalidades:
+# Fetch & Store
 
-Chat inteligente sobre futebol brasileiro
-Curiosidades aleatórias sobre o futebol
-Lista de times populares
-Respostas específicas para Flamengo, Corinthians, Palmeiras, Santos, Pelé, Neymar, etc.
+Aplicativo React Native para registro e visualização de Atividades, Desenvolvido com Expo.
 
-🚀 Para usar:
-bash# Instalar
-npm install
+## Funcionalidades
+- Curiosidades aleatórias sobre o futebol nacional
+- Lista de times populares com informações pré-definidas
+- Respostas específicas para Flamengo, Corinthians, Palmeiras, Santos, Pelé, Neymar e outros
+- Integração com LLM gratuita (Hugging Face)
+- Fallback automático para respostas locais (sempre funciona)
+-  Validação de contexto: ignora perguntas fora do futebol brasileiro
 
-Execute o backend: npm start (porta 3000)
-Abra o HTML: Duplo clique no index.html
-Teste: Clique nos botões ou digite perguntas!
+## Tecnologias Utilizadas
+- [Node.js](https://nodejs.org/)
+- [Express](https://expressjs.com/pt-br/)
+- [Hugging Face API](opcional e gratuita)
+  
+## Instalação
 
-🔧 Como funciona:
+1. Clone o repositório:
+   ```sh
+   git clone <url-do-repo>   
+   ```
+2. Instale as dependências:
+   ```sh
+   npm install
+   ```
+3. Inicie o projeto:
+   ```sh
+   npm start
+   ```
+4. Visualize melhor:
+   abra o arquivo "index.html" e utilize o Live serve
 
-Tenta usar LLM gratuito (Hugging Face)
-Se falhar, usa respostas locais (sempre funciona)
-Valida contexto (só futebol brasileiro)
-Respostas personalizadas para temas populares
+## Configuração
+- O backend deve estar disponível em: `https://github.com/MechamoGui/Desafio---LLM`
+
+## 💬 Exemplos de perguntas
+- "Quantas Copas o Brasil ganhou?"
+
+- "Fale sobre o Flamengo"
+
+- "Quem foi Pelé?"
+
+- "História do Corinthians"
+
+- "Quem é Neymar?"
+
+- "O que é o Brasileirão?"
+
+
+
+
+
